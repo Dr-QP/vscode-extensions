@@ -1,0 +1,457 @@
+{
+    "name": "rde-ros-2",
+    "version": "1.0.3-am",
+    "publisher": "Ranch-Hand-Robotics",
+    "engines": {
+        "vscode": "^1.101.0"
+    },
+    "author": {
+        "name": "Ranchhand Robotics"
+    },
+    "displayName": "Robot Developer Extensions for ROS 2",
+    "description": "Robot Developer Extensions for developing Robot Operating System (ROS) 2 with Visual Studio Code.",
+    "icon": "media/icon.png",
+    "aiKey": "",
+    "categories": [
+        "Debuggers",
+        "Other"
+    ],
+    "capabilities": {
+        "untrustedWorkspaces": {
+            "supported": false,
+            "description": "The Visual Studio Code ROS Extension calls ROS on behalf of packages in the workspace. This can execute code from within the workspace. For this reason, this extension requires a fully trusted workspace."
+        }
+    },
+    "keywords": [
+        "ros",
+        "robot"
+    ],
+    "license": "SEE LICENSE IN LICENSE",
+    "homepage": "https://github.com/ranchhandrobotics/rde-ros-2",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ranchhandrobotics/rde-ros-2"
+    },
+    "bugs": {
+        "url": "https://github.com/ranchhandrobotics/rde-ros-2/issues"
+    },
+    "main": "./dist/extension",
+    "activationEvents": [
+        "onLanguage:cpp",
+        "onLanguage:python",
+        "onLanguage:csharp",
+        "onCommand",
+        "workspaceContains:**/package.xml",
+        "onWebviewPanel:ros2Status",
+        "onDebug",
+        "onDebugInitialConfigurations:ros2",
+        "onDebugResolve:ros2",
+        "onDebugDynamicConfigurations:ros2"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "ROS2.createTerminal",
+                "title": "Create Terminal",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.rosrun",
+                "title": "Run a ROS executable (ros2 run)",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.roslaunch",
+                "title": "Run a ROS launch file (ros2 launch)",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.rostest",
+                "title": "Run a ROS test file (rostest)",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.showCoreStatus",
+                "title": "Show Status",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.startCore",
+                "title": "Start",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.stopCore",
+                "title": "Stop",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.updateCppProperties",
+                "title": "Update C++ Properties",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.updatePythonPath",
+                "title": "Update Python Path",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.rosdep",
+                "title": "Install ROS Dependencies for this workspace using rosdep",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.doctor",
+                "title": "Runs ROS 2 Doctor for diagnosing ROS 2 issues",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.startMcpServer",
+                "title": "Start MCP Server",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.stopMcpServer",
+                "title": "Stop MCP Server",
+                "category": "ROS2"
+            },
+            {
+                "command": "ROS2.showMcpTerminal",
+                "title": "Show MCP Terminal",
+                "category": "ROS2"
+            }
+        ],
+		"mcpServerDefinitionProviders": [
+			{
+				"id": "ROS 2",
+				"label": "ROS 2"
+			}
+		],
+        "configuration": {
+            "type": "object",
+            "title": "ROS2", 
+            "properties": {
+                "ROS2.distro": {
+                    "type": "string",
+                    "description": "ROS installation distro to be sourced."
+                },
+                "ROS2.rosSetupScript": {
+                    "type": "string",
+                    "description": "ROS workspace setup script. Overrides ros.distro."
+                },
+                "ROS2.mcpServerPort": {
+                    "type": "integer",
+                    "default": 3002,
+                    "description": "(Preview) The port to use for the MCP Server."
+                }
+            }
+        },
+        "debuggers": [
+            {
+                "type": "ros2",
+                "label": "ROS 2",
+                "program": "./out/src/debugger/main.js",
+                "runtime": "node",
+                "languages": ["cpp", "python"],
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [
+                            "target"
+                        ],
+                        "properties": {
+                            "target": {
+                                "type": "string",
+                                "description": "Absolute path to launch file",
+                                "default": ""
+                            },
+                            "arguments": {
+                                "type": "array",
+                                "description": "Arguments for the roslaunch or ros2 launch command",
+                                "default": []
+                            },
+                            "env": {
+                                "type": "object",
+                                "description": "Environment variables defined as a key value pair. Property ends up being the Environment Variable and the value of the property ends up being the value of the Env Variable.",
+                                "default": {},
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "symbolSearchPath": {
+                                "type": "string",
+                                "description": "Semicolon separated list of directories to use to search for symbol (that is, pdb) files. Example: \"c:\\dir1;c:\\dir2\"",
+                                "default": ""
+                            },
+                            "additionalSOLibSearchPath": {
+                                "type": "string",
+                                "description": "Semicolon separated list of directories to use to search for .so files",
+                                "default": ""
+                            },
+                            "sourceFileMap": {
+                                "type": "string",
+                                "description": "Optional source file mappings passed to the debug engine. Example: '{ \"/original/source/path\":\"/current/source/path\" }'",
+                                "default": ""
+                            },
+                            "launch": {
+                                "type": "array",
+                                "description": "A list of Scripts or executables to just launch without attaching a debugger",
+                                "default": ""
+                            },
+                            "attachDebugger": {
+                                "type": "array",
+                                "description": "A specific list of executables to just attach a debugger. Useful for large compostions with where only a few nodes need to be debugged",
+                                "default": ""
+                            }
+                        }
+                    },
+                    "debug_launch": {
+                        "required": [
+                            "target"
+                        ],
+                        "properties": {
+                            "target": {
+                                "type": "string",
+                                "description": "Absolute path to launch file",
+                                "default": ""
+                            },
+                            "arguments": {
+                                "type": "array",
+                                "description": "Arguments for the roslaunch or ros2 launch command",
+                                "default": []
+                            },
+                            "env": {
+                                "type": "object",
+                                "description": "Environment variables defined as a key value pair. Property ends up being the Environment Variable and the value of the property ends up being the value of the Env Variable.",
+                                "default": {},
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "attach": {
+                        "properties": {
+                            "runtime": {
+                                "type": "string",
+                                "description": "Runtime type of the node (currently supports Python and C++). Use \"${action:pick}\" to choose interactively.\nThis is only for local processes that were launched directly. Advanced attaching (e.g. attaching to a running ptvsd server, attaching to a remote process, etc.) should use language-specific debugger extension.",
+                                "enum": [
+                                    "${action:pick}",
+                                    "C++",
+                                    "Python"
+                                ],
+                                "default": "${action:pick}"
+                            },
+                            "processId": {
+                                "anyOf": [
+                                    {
+                                        "type": "string",
+                                        "description": "Optional process id to attach the debugger to. Use \"${action:pick}\" to get a list of local running processes to attach to. Note that some platforms require administrator privileges in order to attach to a process.",
+                                        "enum": [
+                                            "${action:pick}"
+                                        ],
+                                        "default": "${action:pick}"
+                                    },
+                                    {
+                                        "type": "integer",
+                                        "description": "Optional process id to attach the debugger to. Use \"${action:pick}\" to get a list of local running processes to attach to. Note that some platforms require administrator privileges in order to attach to a process.",
+                                        "default": 0
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "configurationSnippets": [
+                    {
+                        "label": "ROS2: ROS 2 Launch",
+                        "description": "Debug ROS node(s) at launch.",
+                        "body": {
+                            "name": "ROS2: Launch",
+                            "type": "ros2",
+                            "request": "launch",
+                            "target": "absolute path to launch file"
+                        }
+                    },
+                    {
+                        "label": "ROS2: ROS 2 Attach",
+                        "description": "Debug a ROS node by attaching to it.",
+                        "body": {
+                            "name": "ROS2: Attach",
+                            "type": "ros2",
+                            "request": "attach"
+                        }
+                    }
+                ]
+            }
+        ],
+        "languages": [
+            {
+                "id": "xml",
+                "extensions": [
+                    "launch",
+                    "srdf",
+                    "test"
+                ]
+            },
+            {
+                "id": "yaml",
+                "extensions": [
+                    "rviz"
+                ]
+            },
+            {
+                "id": "RDE.msg",
+                "aliases": [
+                    "ROS Message"
+                ],
+                "extensions": [
+                    ".action",
+                    ".msg",
+                    ".srv"
+                ],
+                "configuration": "./languages/ros.msg.configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "RDE.msg",
+                "scopeName": "source.rde.msg",
+                "path": "./languages/syntaxes/ros.msg.tmLanguage.json"
+            }
+        ],
+        "problemMatchers": [
+            {
+                "name": "colcon-gcc",
+                "fileLocation": "absolute",
+                "owner": "colcon",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            {
+                "name": "roscore",
+                "pattern": {
+                    "regexp": ".",
+                    "file": 1,
+                    "line": 2,
+                    "message": 3
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": "(process\\[master\\]: started with pid|roscore cannot run|master is already running)"
+                }
+            },
+            {
+                "name": "roslaunch",
+                "pattern": {
+                    "regexp": "^(.*):\\s+(.*):\\s+line\\s+(\\d+),\\s+column\\s+(\\d+)$",
+                    "line": 3,
+                    "column": 4,
+                    "message": 2,
+                    "severity": 1
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "started roslaunch server",
+                    "endsPattern": "ROS_MASTER_URI="
+                }
+            }
+        ],
+        "taskDefinitions": [
+            {
+                "type": "ROS2",
+                "required": [
+                    "command"
+                ],
+                "properties": {
+                    "command": {
+                        "type": "string",
+                        "description": "command to execute in ROS environment"
+                    },
+                    "args": {
+                        "type": "array",
+                        "description": "Command line arguments to command"
+                    }
+                }
+            },
+            {
+                "type": "colcon",
+                "properties": {
+                    "args": {
+                        "type": "array",
+                        "description": "Command line arguments to colcon"
+                    }
+                }
+            }
+        ]
+    },
+    "scripts": {
+        "package:dev": "vsce package -o rde-ros-2-dev.vsix",
+        "build": "npm run package",
+        "lint": "eslint -p ./",
+        "pretest": "npm run compile",
+        "test": "node ./out/src/test/runTest.js",
+        "vscode:prepublish": "npm run package",
+        "webpack": "webpack --mode development",
+        "watch": "webpack --mode development --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "test-compile": "npm run webpack",
+		"download-api": "dts dev",
+		"postdownload-api": "dts main",
+		"postinstall": "npm run download-api"        
+    },
+    "dependencies": {
+        "@vscode/debugadapter": "^1.68.0",
+        "@vscode/extension-telemetry": "^1.0.0",
+        "assert": "^2.1.0",
+        "buffer": "^6.0.3",
+        "console-browserify": "^1.2.0",
+        "constants-browserify": "^1.0.0",
+        "crypto-browserify": "^3.12.1",
+        "domain-browser": "^5.7.0",
+        "https-browserify": "^1.0.0",
+        "js-yaml": "^4.1.0",
+        "os-browserify": "^0.3.0",
+        "path-browserify": "^1.0.1",
+        "portfinder": "^1.0.37",
+        "querystring-es3": "^0.2.1",
+        "shell-quote": "^1.8.3",
+        "stream-browserify": "^3.0.0",
+        "stream-http": "^3.2.0",
+        "string_decoder": "^1.3.0",
+        "sudo-prompt": "^9.2.1",
+        "timers-browserify": "^2.0.12",
+        "tmp": "^0.2.3",
+        "tslib": "^2.8.1",
+        "@vscode/vsce": "^3.5.0",
+        "xmlrpc": "^1.3.2"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.1.0",
+        "@types/js-yaml": "^4.0.9",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^24.0.3",
+        "@types/shell-quote": "^1.7.5",
+        "@types/tmp": "^0.2.6",
+        "@types/vscode-webview": "^1.57.5",
+        "@types/xmlrpc": "^1.3.10",
+        "@vscode/test-electron": "^2.5.2",
+        "@vscode/dts": "^0.4.1",
+        "glob": "^11.0.3",
+        "mocha": "^11.5.0",
+        "ts-loader": "^9.5.2",
+        "typescript": "^5.8.3",
+        "webpack": "^5.99.9",
+        "webpack-cli": "^6.0.1"
+    },
+    "extensionDependencies": [
+        "ms-python.python",
+        "ms-vscode.cpptools"
+    ]
+}
