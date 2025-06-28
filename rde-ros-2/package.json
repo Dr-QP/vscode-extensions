@@ -35,7 +35,7 @@
     "bugs": {
         "url": "https://github.com/ranchhandrobotics/rde-ros-2/issues"
     },
-    "main": "./dist/extension",
+    "main": "./dist/extension.js",
     "activationEvents": [
         "onLanguage:cpp",
         "onLanguage:python",
@@ -129,7 +129,7 @@
 		],
         "configuration": {
             "type": "object",
-            "title": "ROS2", 
+            "title": "ROS2",
             "properties": {
                 "ROS2.distro": {
                     "type": "string",
@@ -404,7 +404,7 @@
         "test-compile": "npm run webpack",
 		"download-api": "dts dev",
 		"postdownload-api": "dts main",
-		"postinstall": "npm run download-api"        
+		"postinstall": "npm run download-api"
     },
     "dependencies": {
         "@vscode/debugadapter": "^1.68.0",
