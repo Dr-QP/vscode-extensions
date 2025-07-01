@@ -1,0 +1,123 @@
+{
+  "name": "ros2-topic-viewer",
+  "publisher": "AlessandroSofia",
+  "displayName": "ROS2 Topic Viewer",
+  "icon": "media/main-icon.jpg",
+  "description": "List and manage topics from VSCode",
+  "version": "0.1.4-rc",
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alesof/ROS2-VSC-Toolkit"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ros2-topic-viewer.refreshTopics",
+        "title": "Refresh Topics",
+        "category": "ROS2",
+        "icon": {
+          "light": "media/reload-light.svg",
+          "dark": "media/reload-dark.svg"
+        }
+      },
+      {
+        "command": "ros2-topic-viewer.toggleAdvanced",
+        "title": "Toggle Advanced Topic Options",
+        "category": "ROS2",
+        "icon": {
+          "light": "media/toggle-advanced-dark.svg",
+          "dark": "media/toggle-advanced-dark.svg"
+        }
+      },
+      {
+        "command": "ros2-topic-viewer.togglePanelLimit",
+        "title": "Toggle Panel Limit Setting",
+        "category": "ROS2"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Extension Settings",
+      "properties": {
+        "ros2-topic-viewer.panelLimitSetting": {
+          "type": "boolean",
+          "default": true,
+          "description": "Disable max panels limit"
+        },
+        "ros2-topic-viewer.rosSetupScript": {
+          "type": "string",
+          "default": "",
+          "description": "Path to ROS setup script"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ros2View",
+          "title": "ROS2",
+          "icon": "media/turtle.svg"
+        }
+      ]
+    },
+    "views": {
+      "ros2View": [
+        {
+          "id": "ros2TopicsView",
+          "name": "ROS2 Topics"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "ros2-topic-viewer.refreshTopics",
+          "when": "view == ros2TopicsView",
+          "group": "navigation"
+        },
+        {
+          "command": "ros2-topic-viewer.toggleAdvanced",
+          "when": "view == ros2TopicsView",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "dev:pack": "vsce package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.8",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.94.0",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.11.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.6.2"
+  }
+}
